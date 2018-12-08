@@ -1,7 +1,7 @@
 # Parameters
 $working_path = "C:\Users\example\Documents\" # Path of document
-$original_docx = "test.docx"                 # Name of existing document (in path)
-$html_block = ""                             # HTML you want to insert in the embeddedHTML document
+$original_docx = "test.docx"                  # Name of existing document (in path)
+$html_block = ""                              # HTML you want to insert in the embeddedHTML document
 
 # Open the document as an archive
 
@@ -13,8 +13,19 @@ Rename-Item -Path "$working_path\archive.zip" -NewName $original_docx
 
 # Parse the XML file
 
-[xml]$XmlDocument = Get-Content -Path "$working_path\archive\word\document.xml"
+$xml = New-Object XML
+$xml.Load("$working_path\archive\word\document.xml")
+$xml.SelectNodes("//*") | ForEach-Object {
+    if($_.embeddedHtml){
+        $_.SetAttribute("embeddedHtml",$html_block)
+    }
+}
+$xml.Save("$working_path\archive\word\document.xml")
 
-$XmlDocument.SelectNodes("//*").embeddedHtml
+# Close back the file
 
-# Full node location in test document :  .p.r.drawing.inline.graphic.graphicData.pic.blipFill.blip.extLst.ext[1].webVideoPr.embeddedHtml
+Compress-Archive -Path "$working_path\archive\*" -DestinationPath "$working_path\archive.zip"
+
+Remove-Item -Path "$working_path\archive" -Force -Recurse
+
+Rename-Item -Path "$working_path\archive.zip" -NewName "output.docx"
