@@ -1,14 +1,18 @@
 # docx-embeddedhtml-injection
-This PowerShell script injects arbitrary HTML code into a docx file, replacing the value of a pre-existing embeddedHtml tag.
-
 Researchers at Cymulate [found a vulnerability in Microsoft Word documents with an embedded video player](https://blog.cymulate.com/abusing-microsoft-office-online-video). This vulnerability lets anyone inject HTML code in place of the expected Youtube iframe.
+
+This PowerShell script exploits this known vulnerability in documents with embedded online videos by injecting them with HTML code, replacing the values of all pre-existing embeddedHtml tags. Microsoft Word will execute any HTML you inject, here's an example :
+
+![xml_docx_example](https://user-images.githubusercontent.com/45467550/49740658-b9437300-fc62-11e8-9d29-9618777b90fe.PNG)
 
 The process to inject the HTML code can be somewhat tedious. This script attempts to automate this process.
 
 ## How to use
 ### Prerequisites
 
-This script was made using PowerShell 5.1
+You will need a Word document with at least one or more online videos. To add an online video in a Word document, simply go to **Insert > Online Video** and search for a video. If you have any issues, refer to the [official Microsoft documentation](https://support.office.com/en-us/article/video-insert-online-video-bf11b812-0243-4f53-a1f9-432fbf7ace2c).
+
+This script was made using PowerShell 5.1, so you will need PowerShell version 5.1 or a newer version.
 
 To use this function in the PowerShell terminal, you can simply [dot source](https://ss64.com/ps/source.html) it from the terminal :
 
